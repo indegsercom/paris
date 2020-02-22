@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
-import request from "request";
+import axios from "axios";
 import mime from "mime-types";
 import { upload } from "../../../lib/aws";
+import shortid from "shortid";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { image, w, h } = req.query;
@@ -12,21 +13,35 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     withoutEnlargement: true
   };
 
-  const s = sharp();
+  let info;
+  const resizer = sharp()
+    .resize(resizeOptions)
+    .on("info", function(_info) {
+      info = _info;
+    });
 
-  s.metadata().then(metadata => {
-    const { width, height, size, format } = metadata;
-    const contentType = mime.lookup(format);
-    res.setHeader("content-type", contentType);
-    res.setHeader("Cache-control", "max-age=2592000");
-    res.setHeader("e-tag", `${width}x${height}-${size}`);
+  const response = await axios(image as string, {
+    method: "get",
+    responseType: "stream"
   });
 
-  const resizer = s.resize(resizeOptions);
+  const contentType = response.headers["content-type"];
+  const key = [shortid(), mime.extension(contentType)]
+    .filter(Boolean)
+    .join(".");
 
-  const stream = request(image).pipe(resizer);
+  const uploadConfig = {
+    Key: key,
+    ContentType: contentType
+  };
+  const stream = response.data.pipe(resizer);
+  const data = await upload(uploadConfig, stream);
 
-  const data = await upload("hello.jpg", stream);
-
-  res.json(data);
+  res.json({
+    success: true,
+    data: {
+      location: data.Location,
+      info
+    }
+  });
 };

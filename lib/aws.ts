@@ -7,12 +7,14 @@ const s3 = new AWS.S3({
   secretAccessKey: AWS_ACCESS_KEY
 });
 
-export const upload = (key: string, stream) => {
+export const upload = (config, stream) => {
   return s3
     .upload({
-      Key: key,
+      ...config,
+      ACL: "public-read",
       Bucket: "cdn.indegser.com",
-      Body: stream
+      Body: stream,
+      CacheControl: "max-age=31556952" // one year
     })
     .promise();
 };
