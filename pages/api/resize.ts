@@ -2,14 +2,35 @@ import { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
 import axios from "axios";
 import mime from "mime-types";
-import { upload } from "../../../lib/aws";
+import { upload } from "../../lib/aws";
 import shortid from "shortid";
+import { handleErrors, createError } from "micro-boom";
+import compose from "micro-compose";
+import cors from "micro-cors";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { image, w, h } = req.query;
+const getResizeOptions = requestBody => {
+  const res = {};
+  const whitelists = ["width", "height"];
+  for (const key of whitelists) {
+    const value = Number(requestBody[key]);
+    if (isNaN(value) || value <= 0) {
+      continue;
+    }
+
+    res[key] = value;
+  }
+
+  return res;
+};
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== "POST") {
+    throw createError(405);
+  }
+
+  const { image } = req.body;
   const resizeOptions = {
-    width: w ? Number(w) : null,
-    height: h ? Number(h) : null,
+    ...getResizeOptions(req.body),
     withoutEnlargement: true
   };
 
@@ -38,10 +59,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const data = await upload(uploadConfig, stream);
 
   res.json({
-    success: true,
-    data: {
-      location: data.Location,
-      info
-    }
+    location: data.Location,
+    info
   });
 };
+
+export default compose(handleErrors, cors())(handler);
