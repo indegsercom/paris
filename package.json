@@ -1,0 +1,39 @@
+{
+  "name": "paris",
+  "version": "1.0.0",
+  "description": "Image Resizing NextJs Server",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev -p 3031",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indegsercom/paris.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/indegsercom/paris/issues"
+  },
+  "homepage": "https://github.com/indegsercom/paris#readme",
+  "dependencies": {
+    "aws-sdk": "^2.624.0",
+    "dotenv": "^8.2.0",
+    "mime-types": "^2.1.26",
+    "next": "^9.2.2",
+    "now": "^17.0.3",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "request": "^2.88.2",
+    "sharp": "^0.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.4",
+    "@types/react": "^16.9.21",
+    "@types/sharp": "^0.24.0",
+    "typescript": "^3.7.5"
+  }
+}
