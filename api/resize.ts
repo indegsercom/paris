@@ -63,4 +63,4 @@ const handler = async (req, res) => {
   });
 };
 
-export default compose(handleErrors, cors())(handler);
+export default compose(handleErrors)(handler);
