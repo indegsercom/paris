@@ -2,8 +2,8 @@
   "scope": "indegsercom",
   "regions": ["icn1"],
   "env": {
-    "AWS_ID": "@aws-access-key-id",
-    "AWS_SECRET": "@aws-access-key"
+    "AWS_ID": "@aws-id",
+    "AWS_SECRET": "@aws-secret"
   },
   "headers": [
     {
