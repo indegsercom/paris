@@ -6,6 +6,7 @@ import shortid from "shortid";
 import { handleErrors, createError } from "micro-boom";
 import compose from "micro-compose";
 import cors from "micro-cors";
+import { NowResponse } from "@now/node";
 
 const getResizeOptions = requestBody => {
   const res = {};
@@ -22,7 +23,10 @@ const getResizeOptions = requestBody => {
   return res;
 };
 
-const handler = async (req, res) => {
+const handler = async (req, res: NowResponse) => {
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
   if (req.method !== "POST") {
     throw createError(405);
   }
@@ -63,4 +67,4 @@ const handler = async (req, res) => {
   });
 };
 
-export default compose(handleErrors, cors())(handler);
+export default compose(handleErrors)(handler);
