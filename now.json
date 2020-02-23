@@ -27,7 +27,7 @@
         },
         {
           "key": "Access-Control-Allow-Methods",
-          "value": "OPTIONS"
+          "value": "OPTIONS, GET, POST"
         },
         {
           "key": "Access-Control-Allow-Headers",
