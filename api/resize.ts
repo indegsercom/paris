@@ -1,8 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
 import axios from "axios";
 import mime from "mime-types";
-import { upload } from "../../lib/aws";
+import { upload } from "../lib/aws";
 import shortid from "shortid";
 import { handleErrors, createError } from "micro-boom";
 import compose from "micro-compose";
@@ -23,7 +22,7 @@ const getResizeOptions = requestBody => {
   return res;
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req, res) => {
   if (req.method !== "POST") {
     throw createError(405);
   }

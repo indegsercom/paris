@@ -1,10 +1,10 @@
 import AWS from "aws-sdk";
 
-const { AWS_ACCESS_KEY, AWS_ACCESS_KEY_ID } = process.env;
+const { AWS_SECRET, AWS_ID } = process.env;
 
 const s3 = new AWS.S3({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_ACCESS_KEY
+  accessKeyId: AWS_ID,
+  secretAccessKey: AWS_SECRET
 });
 
 export const upload = (config, stream) => {

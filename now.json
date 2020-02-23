@@ -1,5 +1,27 @@
 {
   "scope": "indegsercom",
-  "name": "paris",
-  "regions": ["icn1"]
+  "regions": ["icn1"],
+  "env": {
+    "AWS_ID": "@aws-access-key-id",
+    "AWS_SECRET": "@aws-access-key"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
 }
