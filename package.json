@@ -25,7 +25,7 @@
     "micro-compose": "0.0.3",
     "micro-cors": "^0.1.1",
     "mime-types": "^2.1.26",
-    "now": "^17.0.3",
+    "now": "^19.0.0",
     "sharp": "^0.24.1",
     "shortid": "^2.2.15"
   },

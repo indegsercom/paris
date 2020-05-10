@@ -5,10 +5,9 @@ import { upload } from "../lib/aws";
 import shortid from "shortid";
 import { handleErrors, createError } from "micro-boom";
 import compose from "micro-compose";
-import cors from "micro-cors";
 import { NowResponse } from "@now/node";
 
-const getResizeOptions = requestBody => {
+const getResizeOptions = (requestBody) => {
   const res = {};
   const whitelists = ["width", "height"];
   for (const key of whitelists) {
@@ -34,19 +33,19 @@ const handler = async (req, res: NowResponse) => {
   const { image } = req.body;
   const resizeOptions = {
     ...getResizeOptions(req.body),
-    withoutEnlargement: true
+    withoutEnlargement: true,
   };
 
   let info;
   const resizer = sharp()
     .resize(resizeOptions)
-    .on("info", function(_info) {
+    .on("info", function (_info) {
       info = _info;
     });
 
   const response = await axios(image as string, {
     method: "get",
-    responseType: "stream"
+    responseType: "stream",
   });
 
   const contentType = response.headers["content-type"];
@@ -56,14 +55,14 @@ const handler = async (req, res: NowResponse) => {
 
   const uploadConfig = {
     Key: key,
-    ContentType: contentType
+    ContentType: contentType,
   };
   const stream = response.data.pipe(resizer);
   const data = await upload(uploadConfig, stream);
 
   res.json({
     location: data.Location,
-    info
+    info,
   });
 };
 
